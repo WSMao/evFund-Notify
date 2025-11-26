@@ -15,8 +15,8 @@ export function Navbar() {
     setShowDropdown(false);
   };
 
-  const handleViewMap = () => {
-    navigate('/map');
+  const handleViewUpdates = () => {
+    navigate('/updates');
     setShowDropdown(false);
   };
 
@@ -31,7 +31,7 @@ export function Navbar() {
                 onClick={() => setShowDropdown(!showDropdown)}
               >
                 查看方案
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" style={{ marginLeft: '0.25rem' }}>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" style={{ marginLeft: '0rem' }}>
                   <path d="M6 8L2 4h8L6 8z"/>
                 </svg>
               </button>
@@ -39,19 +39,17 @@ export function Navbar() {
                 <>
                   <div className="dropdown-backdrop" onClick={() => setShowDropdown(false)} />
                   <div className="dropdown-menu">
+                    <button className="dropdown-item" onClick={handleViewUpdates}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                      </svg>
+                      方案動態
+                    </button>
                     <button className="dropdown-item" onClick={handleViewPlan}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
                       </svg>
-                      集資方案
-                    </button>
-                    <button className="dropdown-item" onClick={handleViewMap}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                        <circle cx="12" cy="10" r="3"/>
-                      </svg>
-                      規劃地圖
+                      集資企劃
                     </button>
                   </div>
                 </>
