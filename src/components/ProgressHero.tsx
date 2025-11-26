@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react';
 import type { FundraisingSummary } from '../types/fundraising';
 import { formatCurrency } from '../utils/formatters';
 
-interface Props extends Pick<FundraisingSummary, 'goal' | 'difference' | 'parkingStats' | 'startDate' | 'endDate'> {
+interface Props extends Pick<FundraisingSummary, 'goal' | 'difference' | 'avgAmount' | 'planQuota' | 'currentPeople' | 'parkingStats' | 'startDate' | 'endDate'> {
   percentage: number;
   raised: number;
-  peopleCount: number;
 }
 
 function useCountdown(endDate: Date | null) {
@@ -49,7 +48,7 @@ function useCountdown(endDate: Date | null) {
   return countdown;
 }
 
-export function ProgressHero({ percentage, raised, goal, difference, peopleCount, parkingStats, startDate, endDate }: Props) {
+export function ProgressHero({ percentage, raised, goal, difference, avgAmount, planQuota, currentPeople, parkingStats, startDate, endDate }: Props) {
   const countdown = useCountdown(endDate);
 
   return (
@@ -66,20 +65,36 @@ export function ProgressHero({ percentage, raised, goal, difference, peopleCount
       </div>
       <div className="hero-stats">
         <div>
-          <p>已募資</p>
-          <strong>{formatCurrency(raised)}</strong>
+          <p>開始日期</p>
+          <strong>{startDate ? new Date(startDate).toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' }) : '尚未設定'}</strong>
+        </div>
+        <div>
+          <p>結束日期</p>
+          <strong>{endDate ? new Date(endDate).toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' }) : '尚未設定'}</strong>
         </div>
         <div>
           <p>目標金額</p>
           <strong>{goal ? formatCurrency(goal) : '尚未設定'}</strong>
         </div>
         <div>
-          <p>目標差額</p>
-          <strong>{difference !== null ? formatCurrency(difference) : '計算中'}</strong>
+          <p>已募資</p>
+          <strong>{formatCurrency(raised)}</strong>
         </div>
         <div>
-          <p>申請人數</p>
-          <strong>{peopleCount} 人</strong>
+          <p>方案名額</p>
+          <strong>{planQuota !== null ? `${planQuota} 位` : '尚未設定'}</strong>
+        </div>
+        <div>
+          <p>目前人數</p>
+          <strong>{currentPeople !== null ? `${currentPeople} 人` : '尚未設定'}</strong>
+        </div>
+        <div>
+          <p>人均金額</p>
+          <strong>{avgAmount !== null ? formatCurrency(avgAmount) : '計算中'}</strong>
+        </div>
+        <div>
+          <p>目標差額</p>
+          <strong>{difference !== null ? formatCurrency(difference) : '計算中'}</strong>
         </div>
         <div>
           <p>B1 車位數</p>

@@ -36,7 +36,9 @@ function App() {
               raised={derived.totalRaised} 
               goal={derived.goal} 
               difference={data.difference}
-              peopleCount={data.entries.length}
+              avgAmount={data.avgAmount}
+              planQuota={data.planQuota}
+              currentPeople={data.currentPeople}
               parkingStats={data.parkingStats}
               startDate={data.startDate}
               endDate={data.endDate}

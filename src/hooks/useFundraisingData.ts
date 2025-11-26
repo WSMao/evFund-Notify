@@ -3,13 +3,37 @@ import { googleSheetConfig, POLLING_INTERVAL_MS } from '../config';
 import type { FundraisingEntry, FundraisingSummary } from '../types/fundraising';
 
 async function fetchGoogleSheet(): Promise<FundraisingSummary> {
-  const { spreadsheetId, range, apiKey, goalCell, accumulatedCell, differenceCell, parkingStatsRange, startDateCell, endDateCell } = googleSheetConfig;
+  const { 
+    spreadsheetId, 
+    range, 
+    apiKey, 
+    startDateCell,
+    endDateCell,
+    goalCell, 
+    accumulatedCell, 
+    planQuotaCell,
+    currentPeopleCell,
+    avgAmountCell,
+    differenceCell, 
+    parkingStatsRange
+  } = googleSheetConfig;
 
   if (!spreadsheetId || !apiKey) {
     throw new Error('Google Sheet 設定不完整，請確認環境變數。');
   }
 
-  const encodedRanges = [range, goalCell, accumulatedCell, differenceCell, parkingStatsRange, startDateCell, endDateCell]
+  const encodedRanges = [
+    range, 
+    startDateCell,
+    endDateCell,
+    goalCell, 
+    accumulatedCell, 
+    planQuotaCell,
+    currentPeopleCell,
+    avgAmountCell,
+    differenceCell, 
+    parkingStatsRange
+  ]
     .map((r) => `ranges=${encodeURIComponent(r)}`)
     .join('&');
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values:batchGet?${encodedRanges}&majorDimension=ROWS&key=${apiKey}`;
@@ -20,7 +44,18 @@ async function fetchGoogleSheet(): Promise<FundraisingSummary> {
   }
 
   const json = await response.json();
-  const [entriesRange, goalRange, accumulatedRange, differenceRange, parkingStatsRange_, startDateRange, endDateRange] = json.valueRanges;
+  const [
+    entriesRange, 
+    startDateRange,
+    endDateRange,
+    goalRange, 
+    accumulatedRange, 
+    planQuotaRange,
+    currentPeopleRange,
+    avgAmountRange,
+    differenceRange, 
+    parkingStatsRange_
+  ] = json.valueRanges;
   const rows: string[][] = entriesRange?.values ?? [];
 
   // 從 row 9 開始，欄位對應：A=加入時間, B=申請人, C=戶號, E=已查核, F=車位樓層, G=車位號碼, I=出資金額
@@ -62,8 +97,21 @@ async function fetchGoogleSheet(): Promise<FundraisingSummary> {
     (a, b) => b.timestamp.getTime() - a.timestamp.getTime() // 依加入時間排序（最新的在前）
   );
 
+  // 解析開始和結束日期
+  const parseDate = (dateStr: string): Date | null => {
+    if (!dateStr) return null;
+    const normalizedDate = dateStr.replace(/：/g, ':');
+    const parsedDate = new Date(normalizedDate);
+    return isNaN(parsedDate.getTime()) ? null : parsedDate;
+  };
+  
+  const startDate = parseDate(startDateRange?.values?.[0]?.[0] ?? '');
+  const endDate = parseDate(endDateRange?.values?.[0]?.[0] ?? '');
   const goal = goalRange?.values?.[0]?.[0] ? Number(goalRange.values[0][0]) : null;
   const accumulated = accumulatedRange?.values?.[0]?.[0] ? Number(accumulatedRange.values[0][0]) : null;
+  const planQuota = planQuotaRange?.values?.[0]?.[0] ? Number(planQuotaRange.values[0][0]) : null;
+  const currentPeople = currentPeopleRange?.values?.[0]?.[0] ? Number(currentPeopleRange.values[0][0]) : null;
+  const avgAmount = avgAmountRange?.values?.[0]?.[0] ? Number(avgAmountRange.values[0][0]) : null;
   const difference = differenceRange?.values?.[0]?.[0] ? Number(differenceRange.values[0][0]) : null;
   
   // 解析車位數資料 (I1:I4)，格式如 "2位"
@@ -79,20 +127,9 @@ async function fetchGoogleSheet(): Promise<FundraisingSummary> {
     b4: parseCount(parkingStatsValues[3]?.[0] ?? '0')
   };
   
-  // 解析開始和結束日期
-  const parseDate = (dateStr: string): Date | null => {
-    if (!dateStr) return null;
-    const normalizedDate = dateStr.replace(/：/g, ':');
-    const parsedDate = new Date(normalizedDate);
-    return isNaN(parsedDate.getTime()) ? null : parsedDate;
-  };
-  
-  const startDate = parseDate(startDateRange?.values?.[0]?.[0] ?? '');
-  const endDate = parseDate(endDateRange?.values?.[0]?.[0] ?? '');
-  
   const lastUpdated = new Date();
 
-  return { entries: sortedEntries, goal, accumulated, difference, parkingStats, startDate, endDate, lastUpdated };
+  return { entries: sortedEntries, goal, accumulated, planQuota, currentPeople, avgAmount, difference, parkingStats, startDate, endDate, lastUpdated };
 }
 
 export function useFundraisingData() {
