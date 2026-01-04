@@ -10,11 +10,14 @@
     "lint": "eslint --ext .ts,.tsx src"
   },
   "dependencies": {
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.9.6"
   },
   "devDependencies": {
+    "@types/html2canvas": "^0.5.35",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^8.8.1",

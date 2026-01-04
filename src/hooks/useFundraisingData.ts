@@ -81,6 +81,7 @@ async function fetchGoogleSheet(): Promise<FundraisingSummary> {
         sponsor: row[1] ?? '匿名',        // col B (index 1)
         householdNumber: row[2] ?? '',    // col C (index 2)
         isVerified,                        // col E (index 4)
+        fullParkingLocation: row[3] ?? '', // col D (index 3) - 完整車位號碼
         parkingFloor: row[5] ?? '',       // col F (index 5, 因為 A=0, B=1, C=2, D=3, E=4, F=5)
         parkingNumber: row[6] ?? '',      // col G (index 6)
         amount: Number(row[8] ?? 0),      // col I (index 8, 因為 A=0, B=1, ..., I=8)

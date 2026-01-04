@@ -1,0 +1,177 @@
+/* 權狀樣式 - A5 橫式尺寸 (210mm x 148mm) */
+.certificate-container {
+  width: 794px;   /* 210mm = 794px at 96dpi */
+  height: 559px;  /* 148mm = 559px at 96dpi */
+  background: #ffffff;  /* 白底 */
+  margin: 10px 10px;
+  border: 2px solid #d4af37;  /* 金色細邊框 */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 20px 45px;  /* 減少上下內邊距 */
+  position: relative;
+  font-family: 'DFKai-SB', 'BiauKai', '標楷體', serif;  /* 標楷體 */
+  box-sizing: border-box;
+}
+
+/* 浮水印 */
+.certificate-container::after {
+  content: '新月天地管委會';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  font-size: 80px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.03);  /* 非常淡的灰色 */
+  letter-spacing: 20px;
+  pointer-events: none;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+/* 裝飾性邊框 */
+.certificate-container::before {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border: 1px solid #d4af37;  /* 金色細邊框 */
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* 裝飾性角落花紋 - 改為灰色完整框框 */
+.certificate-corner {
+  position: absolute;
+  border: 2px solid #ddd;  /* 灰色細線 */
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  z-index: 2;
+}
+
+/* 標題 */
+.certificate-title {
+  text-align: center;
+  font-size: 48px;  /* 從 36px 增加到 42px */
+  font-weight: bold;
+  color: #d4af37;  /* 金色 */
+  margin-bottom: 8px;
+  letter-spacing: 24px;  /* 從 8px 增加到 12px */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  padding-bottom: 8px;
+  border-bottom: 2px solid #d4af37;  /* 金色底線 */
+  display: inline-block;
+  width: auto;
+}
+
+/* 標題容器，用於居中 */
+.certificate-title-wrapper {
+  text-align: center;
+  margin-bottom: 5px;
+  margin-top: 10px;  /* 添加上邊距讓內容往上 */
+  position: relative;
+  z-index: 3;
+}
+
+/* 副標題 */
+.certificate-subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: #535353;  /* 淡灰色 */
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  font-weight: normal;
+  position: relative;
+  z-index: 3;
+}
+
+/* 描述文字 */
+.certificate-description {
+  text-align: center;
+  margin: 40px 0;  /* 減少上下邊距 */
+  font-size: 16px;
+  line-height: 1.8;
+  color: #000;  /* 改為黑色 */
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 3;
+}
+
+/* 內容區域 */
+.certificate-content {
+  margin: 15px 50px;  /* 增加左右邊距，從 30px 改為 50px */
+  line-height: 1.6;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 50px;  /* 增加間距，從 18px 改為 25px */
+  position: relative;
+  z-index: 3;
+}
+
+.certificate-row {
+  display: flex;
+  flex-direction: column;  /* 改為垂直排列 */
+  flex: 1 1 45%;
+  min-width: 45%;
+}
+
+.certificate-label {
+  font-size: 14px;  /* 較小的字體 */
+  color: #999;  /* 灰色 */
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+}
+
+.certificate-value {
+  font-size: 22px;  /* 大一點的字體 */
+  letter-spacing: 2px;
+  color: #000;  /* 黑色 */
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d4af37;  /* 金色底線 */
+}
+
+/* 頁尾 */
+.certificate-footer {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-top: 50px;  /* 增加上邊距 */
+  padding: 0 70px;  /* 增加左右內邊距，讓內容往內縮 */
+  font-size: 16px;
+  color: #000;  /* 改為黑色 */
+  position: relative;
+  z-index: 3;
+}
+
+.certificate-amount {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.certificate-amount-label {
+  font-size: 14px;  /* 增加字體大小 */
+  color: #666;  /* 改為深灰色更醒目 */
+  margin-bottom: 8px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.certificate-amount-value {
+  font-size: 28px;  /* 增加字體大小，從 22px 改為 28px */
+  font-weight: bold;
+  color: #d4af37;  /* 改為金色更醒目 */
+  padding-bottom: 10px;
+  border-bottom: 2px solid #d4af37;  /* 加粗底線 */
+}
+
+.certificate-seal {
+  color: #ddd;  /* 淡灰色文字 */
+  font-weight: normal;
+  letter-spacing: 2px;
+  text-align: center;
+}

@@ -1,0 +1,361 @@
+/* 證書管理頁面樣式 */
+.certificates-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.certificates-header {
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.certificates-header h1 {
+  font-size: 32px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.certificates-header p {
+  font-size: 16px;
+  color: #666;
+}
+
+/* 返回按鈕 */
+.btn-back {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 10px 20px;
+  background: #f0f0f0;
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-back:hover {
+  background: #e0e0e0;
+  transform: translateX(-2px);
+}
+
+.btn-back svg {
+  transition: transform 0.3s;
+}
+
+.btn-back:hover svg {
+  transform: translateX(-3px);
+}
+
+/* 批次操作按鈕 */
+.batch-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.btn-select-all,
+.btn-batch-download {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-select-all {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.btn-select-all:hover {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-batch-download {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  color: white;
+}
+
+.btn-batch-download:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+.btn-batch-download:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 集資人列表 */
+.contributors-list {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.contributor-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s;
+  gap: 15px;
+}
+
+.contributor-item:hover {
+  background-color: #f9f9f9;
+}
+
+.contributor-item:last-child {
+  border-bottom: none;
+}
+
+/* 禁用狀態的項目 */
+.contributor-item-disabled {
+  opacity: 0.6;
+  background-color: #f5f5f5;
+}
+
+.contributor-item-disabled:hover {
+  background-color: #f5f5f5;
+}
+
+/* 勾選框 */
+.contributor-checkbox {
+  flex-shrink: 0;
+}
+
+.contributor-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #667eea;
+}
+
+.contributor-checkbox input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.contributor-info {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.contributor-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.contributor-label {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 4px;
+}
+
+.contributor-value {
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+.contributor-value.amount {
+  color: #2ecc71;
+  font-weight: 600;
+}
+
+.contributor-value.amount-insufficient {
+  color: #e74c3c;
+}
+
+.insufficient-notice {
+  display: block;
+  font-size: 11px;
+  color: #e74c3c;
+  margin-top: 4px;
+  font-weight: normal;
+}
+
+.contributor-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-download {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-download:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-download:active {
+  transform: translateY(0);
+}
+
+.btn-download:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-preview {
+  padding: 10px 20px;
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-preview:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btn-preview:disabled {
+  background: #f5f5f5;
+  color: #ccc;
+  border-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 預覽模態框 */
+.certificate-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.certificate-modal-content {
+  position: relative;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.certificate-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff4757;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.2s;
+}
+
+.certificate-modal-close:hover {
+  background: #ff3838;
+  transform: rotate(90deg);
+}
+
+.certificate-modal-actions {
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* 隱藏的證書容器（用於生成 PDF） */
+.hidden-certificate {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 載入狀態 */
+.loading-message {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-size: 16px;
+}
+
+.error-message {
+  text-align: center;
+  padding: 40px;
+  color: #ff4757;
+  font-size: 16px;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .contributor-info {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .contributor-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-download,
+  .btn-preview {
+    width: 100%;
+  }
+
+  .certificate-modal-content {
+    padding: 10px;
+  }
+}
