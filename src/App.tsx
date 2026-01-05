@@ -43,7 +43,7 @@ function App() {
               startDate={data.startDate}
               endDate={data.endDate}
             />
-            <ContributionList entries={data.entries} />
+            <ContributionList entries={data.entries} avgAmount={data.avgAmount} />
           </>
         )}
       </main>

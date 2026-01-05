@@ -361,6 +361,28 @@ main {
   font-weight: 600;
 }
 
+.contribution-list .amount-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.contribution-list .amount-below-avg {
+  color: #dc2626; /* 紅色 - 未達人均 */
+}
+
+.contribution-list .amount-above-avg {
+  color: #ffd343; /* 金色 - 超過人均 */
+  font-weight: 700;
+}
+
+.contribution-list .amount-note {
+  font-size: 0.6rem;
+  color: #dc2626;
+  font-weight: 500;
+}
+
 @media (max-width: 640px) {
   .navbar {
     margin: -1.5rem -1rem 1.5rem;
@@ -424,6 +446,11 @@ main {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.25rem;
+  }
+
+  .contribution-list .amount-wrapper {
+    align-items: flex-start;
+    margin-top: 0.25rem;
   }
 
   .qrcode-content {
