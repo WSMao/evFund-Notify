@@ -14,3 +14,9 @@ export function formatDateTime(date: Date) {
     timeStyle: 'short'
   }).format(date);
 }
+
+export function formatDate(date: Date) {
+  return new Intl.DateTimeFormat('zh-Hant-TW', {
+    dateStyle: 'medium'
+  }).format(date);
+}
