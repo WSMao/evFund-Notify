@@ -18,13 +18,62 @@ export function PlanUpdates() {
   const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState<{ [key: number]: number }>({});
 
+  // 解析包含連結的文字
+  const parseContentWithLinks = (text: string) => {
+    // 匹配格式：連結(URL) 或 任意文字(URL)
+    const linkPattern = /([^(]+)\((https?:\/\/[^)]+)\)/g;
+    const parts: (string | JSX.Element)[] = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = linkPattern.exec(text)) !== null) {
+      // 添加連結前的文字
+      if (match.index > lastIndex) {
+        parts.push(text.substring(lastIndex, match.index));
+      }
+      
+      // 添加連結元素
+      const linkText = match[1].trim();
+      const url = match[2];
+      parts.push(
+        <a 
+          key={match.index}
+          href={url} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          style={{ 
+            textDecoration: 'none', 
+            cursor: 'pointer',
+            opacity: 0.8,
+            transition: 'opacity 0.2s'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+          onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}
+        >
+          {linkText}
+        </a>
+      );
+      
+      lastIndex = linkPattern.lastIndex;
+    }
+    
+    // 添加剩餘的文字
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+    
+    return parts.length > 0 ? parts : text;
+  };
+
   // 方案動態資料
   const updates: UpdateItem[] = [
       // 可以在這裡添加更多動態
     {
       date: '2026/02/24',
-      title: 'V1 - 第 1 版方案',
+      title: '正式-第 1 版方案',
       content: [
+        '規劃書： 🔗(https://drive.google.com/file/d/1ZloomvGeQ99MHR9BejosM9RsRLhjhZbl/view?usp=sharing)',
+        '報價單： 🔗(https://drive.google.com/file/d/1tsAui0JSCU6aWgjLsnIkk6a2-zo79jzO/view?usp=sharing)',
         '方案總額： 184 萬',
         '方案名額： 54 個',
         '目前人數： 39 位',
@@ -38,8 +87,10 @@ export function PlanUpdates() {
     },
     {
       date: '2025/11/26',
-      title: ' V0 - 初始集資方案',
+      title: ' 問卷調查-初步評估方案',
       content: [
+        '規劃書： 🔗(https://drive.google.com/file/d/1lqEjA4tz6wmpvvjqTIkAs79uBH2uK2cB/view?usp=sharing)',
+        '報價單： 🔗(https://drive.google.com/file/d/1K-RjWoVmPK_yTa6pqoLiQbRqOqeIwftA/view?usp=sharing)',
         '方案總額： 184 萬',
         '方案名額： 54 個',
         '目前人數： 41 位',
@@ -97,7 +148,7 @@ export function PlanUpdates() {
                 {update.content.map((item, i) => (
                   <p key={i} className="update-content-item">
                     <span className="bullet-point">•</span>
-                    {item}
+                    {parseContentWithLinks(item)}
                   </p>
                 ))}
               </div>
