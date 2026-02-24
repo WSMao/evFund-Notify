@@ -22,6 +22,21 @@ export function PlanUpdates() {
   const updates: UpdateItem[] = [
       // 可以在這裡添加更多動態
     {
+      date: '2026/02/24',
+      title: 'V1 - 第 1 版方案',
+      content: [
+        '方案總額： 184 萬',
+        '方案名額： 54 個',
+        '目前人數： 39 位',
+      ],
+      images: [
+        { path: '/V1/B1 配置圖.png', name: 'B1 配置圖' },
+        { path: '/V1/B2 配置圖.png', name: 'B2 配置圖' },
+        { path: '/V1/B3 配置圖.png', name: 'B3 配置圖' },
+        { path: '/V1/B4 配置圖.png', name: 'B4 配置圖' },
+      ],
+    },
+    {
       date: '2025/11/26',
       title: ' V0 - 初始集資方案',
       content: [
