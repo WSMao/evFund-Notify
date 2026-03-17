@@ -15,7 +15,17 @@ function App() {
 
     const totalRaised = data.accumulated ?? 0;  // 使用累積金額欄位
     const goal = data.goal ?? 0;
-    const percentage = goal ? Math.min(100, Math.round((totalRaised / goal) * 100)) : 0;
+
+    let percentage = 0;
+    if (goal > 0) {
+      const rawPercentage = (totalRaised / goal) * 100;
+      const flooredPercentage = Math.floor(rawPercentage);
+
+      // 未達標前最高只顯示 99%，避免四捨五入提早顯示 100%
+      percentage = totalRaised < goal
+        ? Math.min(99, Math.max(0, flooredPercentage))
+        : Math.min(100, Math.max(0, flooredPercentage));
+    }
 
     return { totalRaised, goal, percentage };
   }, [data]);
