@@ -69,12 +69,31 @@ export function PlanUpdates() {
   const updates: UpdateItem[] = [
       // 可以在這裡添加更多動態
     {
+      date: '2026/03/16',
+      title: '正式-第 2 版方案',
+      content: [
+        '規劃書： 🔗(https://drive.google.com/file/d/1jwarmjgWq_q6qogOMjJ6KfNy17prcjEn/view?usp=sharing)',
+        '報價單（議價後）： 🔗(https://drive.google.com/file/d/1Zcld-OThyRWLoZCjijEwEQh9KdMVdv1y/view?usp=sharing)',
+        '報價單（議價前）： 🔗(https://drive.google.com/file/d/1UnOMHm0zI2EvKBWvw5C0WIC0GJlbdTg-/view?usp=sharing)',
+        '方案總額： 260 萬（議價後）',
+        '廠商同意降價，但每度電多收 0.1 元： 從收取 0.3元~0.5 元的費用，變為 0.4~0.6(未含稅與手續費)',
+        '方案名額： 57 個',
+        '目前人數： 49 位',
+      ],
+      images: [
+        { path: '/V2/B1 配置圖.png', name: 'B1 配置圖' },
+        { path: '/V2/B2 配置圖.png', name: 'B2 配置圖' },
+        { path: '/V2/B3 配置圖.png', name: 'B3 配置圖' },
+        { path: '/V2/B4 配置圖.png', name: 'B4 配置圖' },
+      ],
+    },
+    {
       date: '2026/02/24',
       title: '正式-第 1 版方案',
       content: [
         '規劃書： 🔗(https://drive.google.com/file/d/1ZloomvGeQ99MHR9BejosM9RsRLhjhZbl/view?usp=sharing)',
         '報價單： 🔗(https://drive.google.com/file/d/1tsAui0JSCU6aWgjLsnIkk6a2-zo79jzO/view?usp=sharing)',
-        '方案總額： 184 萬',
+        '方案總額： 284 萬',
         '方案名額： 54 個',
         '目前人數： 39 位',
       ],
@@ -91,7 +110,7 @@ export function PlanUpdates() {
       content: [
         '規劃書： 🔗(https://drive.google.com/file/d/1lqEjA4tz6wmpvvjqTIkAs79uBH2uK2cB/view?usp=sharing)',
         '報價單： 🔗(https://drive.google.com/file/d/1K-RjWoVmPK_yTa6pqoLiQbRqOqeIwftA/view?usp=sharing)',
-        '方案總額： 184 萬',
+        '方案總額： 284 萬',
         '方案名額： 54 個',
         '目前人數： 41 位',
       ],
