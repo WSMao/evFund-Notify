@@ -1,6 +1,5 @@
 import React from 'react';
 import { FundraisingEntry } from '../types/fundraising';
-import { formatCurrency } from '../utils/formatters';
 import '../styles/certificate.css';
 
 interface CertificateProps {
@@ -9,14 +8,8 @@ interface CertificateProps {
 }
 
 export const Certificate: React.FC<CertificateProps> = ({ entry, certificateRef }) => {
-  const joinDate = entry.timestamp.toLocaleDateString('zh-TW', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-
-  // 使用完整的車位號碼
-  const parkingLocation = entry.fullParkingLocation || `${entry.parkingFloor}-${entry.parkingNumber}`;
+  const ownerName = entry.parkingOwner || entry.sponsor || '未填寫';
+  const parkingLocation = [entry.parkingFloor, entry.parkingNumber].filter(Boolean).join('-') || entry.fullParkingLocation || '未填寫';
 
   return (
     <div className="certificate-container" ref={certificateRef}>
@@ -34,17 +27,17 @@ export const Certificate: React.FC<CertificateProps> = ({ entry, certificateRef 
       <div className="certificate-content">
         <div className="certificate-row">
           <span className="certificate-label">住戶（區權人）</span>
-          <span className="certificate-value">{entry.sponsor}</span>
-        </div>
-
-        <div className="certificate-row">
-          <span className="certificate-label">加入日期</span>
-          <span className="certificate-value">{joinDate}</span>
+          <span className="certificate-value">{ownerName}</span>
         </div>
 
         <div className="certificate-row">
           <span className="certificate-label">戶號</span>
           <span className="certificate-value">{entry.householdNumber}</span>
+        </div>
+        
+        <div className="certificate-row">
+          <span className="certificate-label">使用分盤</span>
+          <span className="certificate-value">{entry.usagePanel}</span>
         </div>
 
         <div className="certificate-row">

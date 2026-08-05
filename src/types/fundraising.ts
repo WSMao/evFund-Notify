@@ -2,10 +2,12 @@ export interface FundraisingEntry {
   timestamp: Date;
   sponsor: string;
   householdNumber: string;   // 戶號，如 A249-11F
+  parkingOwner: string;      // 車位所有人（from col D）
   isVerified: boolean;       // 是否已查核
+  usagePanel: string;        // 使用分盤
   parkingFloor: string;      // 車位樓層，如 B3
   parkingNumber: string;     // 車位號碼，如 211
-  fullParkingLocation: string; // 完整車位號碼，如 B3211 (from col D)
+  fullParkingLocation: string; // 完整車位號碼（如有獨立欄位可存放）
   amount: number;
   note?: string;
 }

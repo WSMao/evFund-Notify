@@ -6,6 +6,7 @@ async function fetchGoogleSheet(): Promise<FundraisingSummary> {
   const { 
     spreadsheetId, 
     range, 
+    usagePanelRange,
     apiKey, 
     startDateCell,
     endDateCell,
@@ -24,6 +25,7 @@ async function fetchGoogleSheet(): Promise<FundraisingSummary> {
 
   const encodedRanges = [
     range, 
+    usagePanelRange,
     startDateCell,
     endDateCell,
     goalCell, 
@@ -46,6 +48,7 @@ async function fetchGoogleSheet(): Promise<FundraisingSummary> {
   const json = await response.json();
   const [
     entriesRange, 
+    usagePanelRange_,
     startDateRange,
     endDateRange,
     goalRange, 
@@ -57,10 +60,19 @@ async function fetchGoogleSheet(): Promise<FundraisingSummary> {
     parkingStatsRange_
   ] = json.valueRanges;
   const rows: string[][] = entriesRange?.values ?? [];
+  const usagePanelRows: string[][] = usagePanelRange_?.values ?? [];
 
-  // 從 row 9 開始，欄位對應：A=加入時間, B=申請人, C=戶號, E=已查核, F=車位樓層, G=車位號碼, I=出資金額
+  // 從 row 9 開始，主資料欄位：A=加入時間, B=申請人, C=戶號, D=車位所有人, E=已查核, F=車位樓層, G=車位號碼, I=出資金額
+  // 使用分盤固定由獨立範圍抓取 J 欄，避免主 range 設定未含 J 欄時漏資料。
+  const parseAmountValue = (raw: string | undefined): number | null => {
+    if (!raw) return null;
+    const normalized = raw.replace(/[,$\s]/g, '');
+    const value = Number(normalized);
+    return Number.isFinite(value) ? value : null;
+  };
+
   const entries: FundraisingEntry[] = rows
-    .map((row) => {
+    .map((row, rowIndex) => {
       // 解析加入時間，格式如：2025/11/19 15：20
       const timeStr = row[0] ?? '';
       let timestamp = new Date();
@@ -75,16 +87,20 @@ async function fetchGoogleSheet(): Promise<FundraisingSummary> {
       
       // 檢查是否已查核 (col E, index 4)
       const isVerified = row[4]?.toUpperCase() === 'TRUE';
+      const amount = parseAmountValue(row[8]) ?? 0;
+      const usagePanel = (usagePanelRows[rowIndex]?.[0] ?? '').trim();
       
       return {
         timestamp,
         sponsor: row[1] ?? '匿名',        // col B (index 1)
         householdNumber: row[2] ?? '',    // col C (index 2)
+        parkingOwner: row[3] ?? '',       // col D (index 3)
         isVerified,                        // col E (index 4)
-        fullParkingLocation: row[3] ?? '', // col D (index 3) - 完整車位號碼
+        usagePanel,
+        fullParkingLocation: '',
         parkingFloor: row[5] ?? '',       // col F (index 5, 因為 A=0, B=1, C=2, D=3, E=4, F=5)
         parkingNumber: row[6] ?? '',      // col G (index 6)
-        amount: Number(row[8] ?? 0),      // col I (index 8, 因為 A=0, B=1, ..., I=8)
+        amount,
         note: ''
       };
     })

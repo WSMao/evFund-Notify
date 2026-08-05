@@ -4,6 +4,7 @@ declare namespace ImportMeta {
   interface Env {
     readonly VITE_GOOGLE_SHEET_ID: string;
     readonly VITE_GOOGLE_SHEET_RANGE: string;
+    readonly VITE_GOOGLE_USAGE_PANEL_RANGE: string;
     readonly VITE_GOOGLE_API_KEY: string;
     readonly VITE_GOOGLE_START_DATE_CELL: string;
     readonly VITE_GOOGLE_END_DATE_CELL: string;

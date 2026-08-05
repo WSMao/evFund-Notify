@@ -46,7 +46,8 @@
 ```env
 # Google Sheet 設定
 VITE_GOOGLE_SHEET_ID="your-google-sheet-id"
-VITE_GOOGLE_SHEET_RANGE="Fundraising!A9:I500"
+VITE_GOOGLE_SHEET_RANGE="Fundraising!A9:J500"
+VITE_GOOGLE_USAGE_PANEL_RANGE="Fundraising!J9:J500"
 VITE_GOOGLE_START_DATE_CELL="Fundraising!B6"
 VITE_GOOGLE_END_DATE_CELL="Fundraising!C6"
 VITE_GOOGLE_GOAL_CELL="Fundraising!D6"

@@ -1,6 +1,7 @@
 export const googleSheetConfig = {
   spreadsheetId: import.meta.env.VITE_GOOGLE_SHEET_ID ?? '',
-  range: import.meta.env.VITE_GOOGLE_SHEET_RANGE ?? 'Fundraising!A9:I500',
+  range: import.meta.env.VITE_GOOGLE_SHEET_RANGE ?? 'Fundraising!A9:J500',
+  usagePanelRange: import.meta.env.VITE_GOOGLE_USAGE_PANEL_RANGE ?? 'Fundraising!J9:J500',
   apiKey: import.meta.env.VITE_GOOGLE_API_KEY ?? '',
   startDateCell: import.meta.env.VITE_GOOGLE_START_DATE_CELL ?? 'Fundraising!B6',
   endDateCell: import.meta.env.VITE_GOOGLE_END_DATE_CELL ?? 'Fundraising!C6',

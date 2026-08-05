@@ -19,8 +19,20 @@ export const CertificatesPage: React.FC = () => {
   const [isBatchGenerating, setIsBatchGenerating] = useState(false);
   const hiddenCertificateRef = useRef<HTMLDivElement>(null);
 
+  const getEntryKey = (entry: FundraisingEntry, index?: number) => {
+    const base = [
+      entry.householdNumber,
+      entry.timestamp.getTime(),
+      entry.amount,
+      entry.parkingFloor,
+      entry.parkingNumber,
+      entry.usagePanel
+    ].join('|');
+    return index !== undefined ? `${base}|${index}` : base;
+  };
+
   // 切換選取狀態
-  const toggleSelection = (householdNumber: string, entry: FundraisingEntry) => {
+  const toggleSelection = (entryKey: string, entry: FundraisingEntry) => {
     // 檢查是否符合人均金額標準
     if (data?.avgAmount && entry.amount < data.avgAmount) {
       return; // 不允許選取
@@ -28,10 +40,10 @@ export const CertificatesPage: React.FC = () => {
     
     setSelectedEntries(prev => {
       const newSet = new Set(prev);
-      if (newSet.has(householdNumber)) {
-        newSet.delete(householdNumber);
+      if (newSet.has(entryKey)) {
+        newSet.delete(entryKey);
       } else {
-        newSet.add(householdNumber);
+        newSet.add(entryKey);
       }
       return newSet;
     });
@@ -39,15 +51,19 @@ export const CertificatesPage: React.FC = () => {
 
   // 全部選取/取消全部選取
   const toggleSelectAll = () => {
-    // 只選取符合人均金額標準的項目
-    const eligibleEntries = data?.entries.filter(e => 
-      data?.avgAmount ? e.amount >= data.avgAmount : true
-    ) || [];
+    const indexedEntries = (data?.entries || []).map((entry, index) => ({
+      entry,
+      key: getEntryKey(entry, index)
+    }));
+    const eligibleEntryKeys = indexedEntries
+      .filter(({ entry }) => (data?.avgAmount ? entry.amount >= data.avgAmount : true))
+      .map(({ key }) => key);
+    const allEligibleSelected = eligibleEntryKeys.length > 0 && eligibleEntryKeys.every((key) => selectedEntries.has(key));
     
-    if (selectedEntries.size === eligibleEntries.length && eligibleEntries.length > 0) {
+    if (allEligibleSelected) {
       setSelectedEntries(new Set());
     } else {
-      setSelectedEntries(new Set(eligibleEntries.map(e => e.householdNumber)));
+      setSelectedEntries(new Set(eligibleEntryKeys));
     }
   };
 
@@ -58,7 +74,8 @@ export const CertificatesPage: React.FC = () => {
   };
 
   const generatePDF = async (entry: FundraisingEntry) => {
-    setIsGenerating(entry.householdNumber);
+    const entryKey = getEntryKey(entry);
+    setIsGenerating(entryKey);
     
     try {
       console.log('開始生成 PDF，entry:', entry);
@@ -118,7 +135,11 @@ export const CertificatesPage: React.FC = () => {
 
   // 批次下載選取的證書（合併成一個 PDF）
   const generateBatchPDF = async () => {
-    if (selectedEntries.size === 0) {
+    const selectedEntriesList = (data?.entries || []).filter((entry, index) =>
+      selectedEntries.has(getEntryKey(entry, index))
+    );
+
+    if (selectedEntriesList.length === 0) {
       alert('請至少選擇一個證書');
       return;
     }
@@ -126,7 +147,7 @@ export const CertificatesPage: React.FC = () => {
     setIsBatchGenerating(true);
 
     try {
-      console.log('開始批次生成 PDF，共', selectedEntries.size, '個證書');
+      console.log('開始批次生成 PDF，共', selectedEntriesList.length, '個證書');
 
       // 創建 PDF (橫向 A5 尺寸)
       const pdf = new jsPDF({
@@ -135,8 +156,6 @@ export const CertificatesPage: React.FC = () => {
         format: 'a5'
       });
 
-      const selectedEntriesList = data?.entries.filter(e => selectedEntries.has(e.householdNumber)) || [];
-      
       for (let i = 0; i < selectedEntriesList.length; i++) {
         const entry = selectedEntriesList[i];
         console.log(`正在處理第 ${i + 1}/${selectedEntriesList.length} 個證書:`, entry.sponsor);
@@ -224,6 +243,17 @@ export const CertificatesPage: React.FC = () => {
     );
   }
 
+  const indexedEntries = (data?.entries || []).map((entry, index) => ({
+    entry,
+    index,
+    key: getEntryKey(entry, index)
+  }));
+  const eligibleEntryKeys = indexedEntries
+    .filter(({ entry }) => isEligibleForCertificate(entry))
+    .map(({ key }) => key);
+  const selectedCount = indexedEntries.filter(({ key }) => selectedEntries.has(key)).length;
+  const allEligibleSelected = eligibleEntryKeys.length > 0 && eligibleEntryKeys.every((key) => selectedEntries.has(key));
+
   return (
     <div className="app-shell">
       <Navbar />
@@ -241,40 +271,41 @@ export const CertificatesPage: React.FC = () => {
               className="btn-select-all"
               onClick={toggleSelectAll}
             >
-              {selectedEntries.size === data?.entries.length ? '✓ 取消全選' : '☐ 全部選取'}
+              {allEligibleSelected ? '✓ 取消全選' : '☐ 全部選取'}
             </button>
             <button
               className="btn-batch-download"
               onClick={generateBatchPDF}
-              disabled={selectedEntries.size === 0 || isBatchGenerating}
+              disabled={selectedCount === 0 || isBatchGenerating}
             >
               {isBatchGenerating ? (
-                <>⏳ 批次生成中... ({selectedEntries.size} 份)</>
+                <>⏳ 批次生成中... ({selectedCount} 份)</>
               ) : (
-                <>📥 合併下載 ({selectedEntries.size} 份)</>
+                <>📥 合併下載 ({selectedCount} 份)</>
               )}
             </button>
           </div>
         </div>
 
         <div className="contributors-list">
-          {data?.entries.map((entry, index) => {
+          {indexedEntries.map(({ entry, key }) => {
             const isEligible = isEligibleForCertificate(entry);
+            const entryKey = key;
             
             return (
               <div 
-                key={`${entry.householdNumber}-${index}`} 
+                key={entryKey}
                 className={`contributor-item ${!isEligible ? 'contributor-item-disabled' : ''}`}
               >
                 <div className="contributor-checkbox">
                   <input
                     type="checkbox"
-                    checked={selectedEntries.has(entry.householdNumber)}
-                    onChange={() => toggleSelection(entry.householdNumber, entry)}
-                    id={`checkbox-${entry.householdNumber}`}
+                    checked={selectedEntries.has(entryKey)}
+                    onChange={() => toggleSelection(entryKey, entry)}
+                    id={`checkbox-${entryKey}`}
                     disabled={!isEligible}
                   />
-                  <label htmlFor={`checkbox-${entry.householdNumber}`}></label>
+                  <label htmlFor={`checkbox-${entryKey}`}></label>
                 </div>
               
                 <div className="contributor-info">
@@ -320,10 +351,10 @@ export const CertificatesPage: React.FC = () => {
                 <button
                   className="btn-download"
                   onClick={() => generatePDF(entry)}
-                  disabled={isGenerating === entry.householdNumber || !isEligible}
+                  disabled={isGenerating === getEntryKey(entry) || !isEligible}
                   title={!isEligible ? '出資金額未達人均標準，無法下載' : ''}
                 >
-                  {isGenerating === entry.householdNumber ? (
+                  {isGenerating === getEntryKey(entry) ? (
                     <>⏳ 生成中...</>
                   ) : (
                     <>📥 下載</>
